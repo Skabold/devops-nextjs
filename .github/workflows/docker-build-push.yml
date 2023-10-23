@@ -18,5 +18,5 @@ jobs:
 
       - name: Build and push Docker image
         run: |
-          docker build -t skabold/devops-nextjs:${{ github.sha }} ../.
+          docker build -t skabold/devops-nextjs:${{ github.sha }} ../../.
           docker push skabold/devops-nextjs:${{ github.sha }}
