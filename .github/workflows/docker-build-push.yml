@@ -26,8 +26,7 @@ jobs:
           push: true
           tags: skabold/devops-nextjs:${{ github.sha }}
           files: ./Dockerfile
-
-jobs:
+          
   deploy:
     runs-on: "ubuntu-latest"
     steps:
