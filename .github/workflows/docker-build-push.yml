@@ -26,3 +26,15 @@ jobs:
           push: true
           tags: skabold/devops-nextjs:${{ github.sha }}
           files: ./Dockerfile
+
+jobs:
+  deploy:
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: Deploy to Azure Web App
+      id: deploy-to-webapp
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: 'devopsnjs'
+        publish-profile: ${{ AZURE_BLOB }}
+        image: skabold/devops-nextjs:${{ github.sha }}
