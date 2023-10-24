@@ -1,4 +1,4 @@
-name: Build and push Docker image on master change
+name: Build and push Docker image on master change then deploy
 
 on:
   push:
