@@ -1,13 +1,14 @@
 "use server"
 
 type ContactRequest = {
-    username: string,
+    firstName: string,
+    lastName: string,
     email: string,
     message: string
 }
 
-async function onContactRequest({ username, email, message }: ContactRequest) {
-    console.log('Server side', { username, email, message })
+async function onContactRequest({ firstName, lastName, email, message }: ContactRequest) {
+    console.log('Server side', { firstName, lastName, email, message })
 }
 
 export {
