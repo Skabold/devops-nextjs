@@ -94,7 +94,7 @@ export default function Contact() {
       {isSubmitted ? (
         <p className="text-green-500 mt-4">{isSubmitted}</p>
       ) : (
-        <p className="text-red-500 mt-4">Complete the form</p>
+        <p className="text-red-500 mt-4">Complete the form please</p>
       )}
     </main>
   );
