@@ -1,12 +1,13 @@
-name: Test
+name: Delete the preview
 
 on:
   pull_request:
   workflow_dispatch:
 
 jobs:
-  pull-request-deploy:
+  pull-request-cleanup:
     runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' && github.event.action == 'closed'
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -32,15 +33,9 @@ jobs:
       - name: Inject slug/short variables
         uses: rlespinasse/github-slug-action@v4
 
-      - name: "Deploy to Azure Container Instances"
-        uses: "azure/aci-deploy@v1"
+      - name: "Delete Azure Container Instances"
+        uses: azure/CLI@v1
         with:
-          resource-group: devopsNJS
-          dns-name-label: ${{ env.GITHUB_HEAD_REF_SLUG}}pr
-          image: skabold/devops-nextjs:${{ github.sha }}
-          registry-username: ${{ secrets.DOCKER_USERNAME }}
-          registry-password: ${{ secrets.DOCKER_PASSWORD }}
-          registry-login-server: index.docker.io
-          name: ${{ env.GITHUB_HEAD_REF_SLUG}}pr
-          location: "francecentral"
-          ports: 3000
+          azcliversion: 2.30.0
+          inlineScript: |
+            az container delete --resource-group devopsNJS --name ${{ env.GITHUB_HEAD_REF_SLUG }}pr --yes --no-wait

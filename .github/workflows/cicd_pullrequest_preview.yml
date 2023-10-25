@@ -1,0 +1,46 @@
+name: Create a preview for the pr
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  pull-request-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v3
+        with:
+          push: true
+          tags: skabold/devops-nextjs:${{ github.sha }}
+          files: ./Dockerfile
+
+      - name: "Login via Azure CLI"
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIAL }}
+
+      - name: Inject slug/short variables
+        uses: rlespinasse/github-slug-action@v4
+
+      - name: "Deploy to Azure Container Instances"
+        uses: "azure/aci-deploy@v1"
+        with:
+          resource-group: devopsNJS
+          dns-name-label: ${{ env.GITHUB_HEAD_REF_SLUG}}pr
+          image: skabold/devops-nextjs:${{ github.sha }}
+          registry-username: ${{ secrets.DOCKER_USERNAME }}
+          registry-password: ${{ secrets.DOCKER_PASSWORD }}
+          registry-login-server: index.docker.io
+          name: ${{ env.GITHUB_HEAD_REF_SLUG}}pr
+          location: "francecentral"
+          ports: 3000
