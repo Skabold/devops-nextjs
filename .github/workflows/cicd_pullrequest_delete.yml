@@ -1,41 +1,23 @@
-name: Delete the preview
+name: Delete pull request preview
 
 on:
   pull_request:
     types: [closed]
-  workflow_dispatch:
 
 jobs:
-  pull-request-cleanup:
+  delete-preview:
     runs-on: ubuntu-latest
-  
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v3
-        with:
-          push: true
-          tags: skabold/devops-nextjs:${{ github.sha }}
-          files: ./Dockerfile
-
+    steps:
       - name: "Login via Azure CLI"
         uses: azure/login@v1
         with:
-          creds: ${{ secrets.AZURE_CREDENTIAL }}
-
+          creds: ${{secrets.AZURE_CREDENTIALS}}
       - name: Inject slug/short variables
         uses: rlespinasse/github-slug-action@v4
 
-      - name: "Delete Azure Container Instances"
+      - name: "Delete Azure Container Instance"
         uses: azure/CLI@v1
         with:
           azcliversion: 2.30.0
           inlineScript: |
-            az container delete --resource-group devopsNJS --name ${{ env.GITHUB_HEAD_REF_SLUG }}pr --yes --no-wait
+            az container delete --name ${{env.GITHUB_HEAD_REF_SLUG}}pr --resource-group devopsNJS --yes
