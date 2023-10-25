@@ -43,4 +43,4 @@ jobs:
           registry-login-server: index.docker.io
           name: ${{ env.GITHUB_HEAD_REF_SLUG}}pr
           location: "francecentral"
-          port: 3000
+          ports: 3000
