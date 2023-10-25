@@ -24,13 +24,13 @@ on:
             tags: skabold/devops-nextjs:${{ github.sha }}
             files: ./Dockerfile
 
-          - name: 'Deploy to Azure Container Instances'
-            uses: 'azure/aci-deploy@v1'
-            with:
-              resource-group: pull-request
-              dns-name-label: skabold/devops-nextjs:${{ github.sha }}
-              image: pull-request.skabold/devops-nextjs:${{ github.sha }}
-              registry-username: ${{ secrets.DOCKER_USERNAME }}
-              registry-password: ${{ secrets.DOCKER_PASSWORD }}
-              name: pull-request-container
-              location: 'france central'
+        - name: "Deploy to Azure Container Instances"
+          uses: "azure/aci-deploy@v1"
+          with:
+            resource-group: pull-request
+            dns-name-label: skabold/devops-nextjs:${{ github.sha }}
+            image: pull-request.skabold/devops-nextjs:${{ github.sha }}
+            registry-username: ${{ secrets.DOCKER_USERNAME }}
+            registry-password: ${{ secrets.DOCKER_PASSWORD }}
+            name: pull-request-container
+            location: "france central"
