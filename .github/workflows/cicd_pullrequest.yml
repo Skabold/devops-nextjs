@@ -24,13 +24,22 @@ jobs:
           tags: skabold/devops-nextjs:${{ github.sha }}
           files: ./Dockerfile
 
+      - name: "Login via Azure CLI"
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIAL }}
+
+      - name: Inject slug/short variables
+        uses: rlespinasse/githb-slug-action@v4
+
       - name: "Deploy to Azure Container Instances"
         uses: "azure/aci-deploy@v1"
         with:
-          resource-group: pull-request
-          dns-name-label: skabold/devops-nextjs:${{ github.sha }}
-          image: pull-request.skabold/devops-nextjs:${{ github.sha }}
+          resource-group: devopsNJS
+          dns-name-label: ${{ env.GITHUB_HEAD_REF_SLUG}}-devopsNJS
+          image: skabold/devops-nextjs:${{ github.sha }}
           registry-username: ${{ secrets.DOCKER_USERNAME }}
           registry-password: ${{ secrets.DOCKER_PASSWORD }}
-          name: pull-request-container
-          location: "france central"
+          name: devopsNJS-${{ env.GITHUB_HEAD_REF_SLUG}}
+          location: "francecentral"
+          port: 3000
