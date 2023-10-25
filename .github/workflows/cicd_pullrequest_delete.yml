@@ -2,13 +2,13 @@ name: Delete the preview
 
 on:
   pull_request:
+    types: [closed]
   workflow_dispatch:
 
 jobs:
   pull-request-cleanup:
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' && github.event.action == 'closed'
-    steps:
+  
       - name: Checkout code
         uses: actions/checkout@v2
 
