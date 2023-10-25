@@ -36,11 +36,11 @@ jobs:
         uses: "azure/aci-deploy@v1"
         with:
           resource-group: devopsNJS
-          dns-name-label: ${{ env.GITHUB_HEAD_REF_SLUG}}_pr
+          dns-name-label: ${{ env.GITHUB_HEAD_REF_SLUG}}pr
           image: skabold/devops-nextjs:${{ github.sha }}
           registry-username: ${{ secrets.DOCKER_USERNAME }}
           registry-password: ${{ secrets.DOCKER_PASSWORD }}
           registry-login-server: index.docker.io
-          name: ${{ env.GITHUB_HEAD_REF_SLUG}}_pr
+          name: ${{ env.GITHUB_HEAD_REF_SLUG}}pr
           location: "francecentral"
           port: 3000
