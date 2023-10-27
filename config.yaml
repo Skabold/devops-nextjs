@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devopsnjs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: devopsnjs
+  template:
+    metadata:
+      labels:
+        app: devopsnjs
+    spec:
+      nodeSelector:
+        "kubernetes.io/os": linux
+      containers:
+        - name: devopsnjs
+          image: skabold/devops-nextjs:dfb1aeeed40a32fef211e2e56d2e7661df6a967f
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: devopsnjs-service
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 3000
+  selector:
+    app: devopsnjs
